@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=yes, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{% block title %}Series!{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+
+  <link rel="icon" href="{{ asset('img/icon.png') }}">
+
+  {% block extrastyles %}{% endblock %}
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1><a href="{{ path('main_home') }}"><img src="{{ asset('img/logo.svg') }}" alt="Series!"></a></h1>
+      <nav>
+        <ul>
+          <li><a href="{{ path('main_home') }}" title="Home">Home</a></li>
+          <li><a href="{{ path('main_test') }}" title="Test">Test</a></li>
+          <li><a href="{{ path('serie_list') }}" title="All series">Series</a></li>
+          {% if app.user %}
+            <li><a href="{{ path('serie_create') }}" title="Create a new serie">Create</a></li>
+            <li><a href="{{ path('season_create') }}" title="Create a new season">Create a season</a></li>
+            <li><a href="{{ path('app_logout') }}" title="logout">Logout ({{ app.user.firstname }})</a></li>
+
+            {% if is_granted("ROLE_ADMIN") %}
+              <li><a href="{{ path('admin_dashboard') }}" title="Admin dashboard">Admin</a></li>
+            {% endif %}
+
+          {% else %}
+            <li><a href="{{ path('app_login') }}" title="Login">Login</a></li>
+            <li><a href="{{ path('app_register') }}" title="Create account">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+      {% for message in messages %}
+        <div class="flash flash-{{ label }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+
+    <main>
+      {% block body %} {% endblock %}
+    </main>
+
+    <footer>
+      <div>&copy; {{ "now" | date('Y') }} Series!</div>
+    </footer>
+  </div>
+
+</body>
+</html>
